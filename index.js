@@ -2,7 +2,7 @@ import Button from "./src/Button";
 import Colors from "./src/Colors";
 import DateModel from "./src/DateModel";
 import Dialog from "./src/Dialog";
-import  * as Functions from "./src/Functions";
+import * as Functions from "./src/Functions";
 import GridView from "./src/GridView";
 import LazyImage from "./src/LazyImage";
 import ListView from "./src/ListView";
@@ -32,3 +32,4 @@ export {
   ViewKeyBoard,
   ViewShadow
 };
+export default Colors
