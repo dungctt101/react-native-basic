@@ -32,4 +32,3 @@ export {
   ViewKeyBoard,
   ViewShadow
 };
-export default Colors

@@ -1,27 +1,23 @@
-import React, {Component} from 'react';
-import {
-  View,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
-import {arrayIsEmpty, objectIsNull, showNotItem} from './Functions';
+import React, { Component } from "react";
+import { View, ScrollView, RefreshControl } from "react-native";
+import { arrayIsEmpty, objectIsNull, showNotItem } from "./Functions";
 class FlatListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeRowKey: null,
-      numberOfRefresh: 0,
+      numberOfRefresh: 0
     };
   }
   refreshFlatListItem = () => {
     this.setState(prevState => {
       return {
-        numberOfRefresh: prevState.numberOfRefresh + 1,
+        numberOfRefresh: prevState.numberOfRefresh + 1
       };
     });
   };
   render() {
-    const {item, onEditItem, onRemoveItem, index, itemView} = this.props;
+    const { item, onEditItem, onRemoveItem, index, itemView } = this.props;
     var right = [];
 
     if (!objectIsNull(onEditItem)) {
@@ -29,8 +25,8 @@ class FlatListItem extends Component {
         onPress: () => {
           onEditItem(index);
         },
-        text: 'Edit',
-        type: 'primary',
+        text: "Edit",
+        type: "primary"
       });
     }
     if (!objectIsNull(onRemoveItem)) {
@@ -38,8 +34,8 @@ class FlatListItem extends Component {
         onPress: () => {
           onRemoveItem(index);
         },
-        text: 'Delete',
-        type: 'delete',
+        text: "Delete",
+        type: "delete"
       });
     }
 
@@ -47,15 +43,15 @@ class FlatListItem extends Component {
       autoClose: true,
       onClose: (secId, rowId, direction) => {
         if (this.state.activeRowKey != null) {
-          this.setState({activeRowKey: null});
+          this.setState({ activeRowKey: null });
         }
       },
       onOpen: (secId, rowId, direction) => {
-        this.setState({activeRowKey: item.key});
+        this.setState({ activeRowKey: item.key });
       },
       right: right,
       rowId: index,
-      sectionId: 1,
+      sectionId: 1
     };
     return (
       // <Swipeout
@@ -63,7 +59,13 @@ class FlatListItem extends Component {
       //     backgroundColor: 'transparent',
       //   }}
       //   {...swipeSettings}>
+      <View
+        style={{
+          backgroundColor: "transparent"
+        }}
+      >
         {itemView(item)}
+      </View>
       // </Swipeout>
     );
   }
@@ -72,14 +74,14 @@ export default class ListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deletedRowKey: null,
+      deletedRowKey: null
     };
     this._onPressAdd = this._onPressAdd.bind(this);
   }
   refreshFlatList = activeKey => {
     this.setState(prevState => {
       return {
-        deletedRowKey: activeKey,
+        deletedRowKey: activeKey
       };
     });
     this.refs.flatList.scrollToEnd();
@@ -88,7 +90,7 @@ export default class ListView extends Component {
     this.refs.addModal.showAddModal();
   }
   render() {
-    const {items, itemView, style, refreshing, onRefresh} = this.props;
+    const { items, itemView, style, refreshing, onRefresh } = this.props;
     var rows = [];
     if (!arrayIsEmpty(items)) {
       for (var i = 0; i < items.length; i++) {
@@ -100,7 +102,8 @@ export default class ListView extends Component {
             itemView={itemView}
             item={items[i]}
             index={i}
-            parentFlatList={this}></FlatListItem>,
+            parentFlatList={this}
+          ></FlatListItem>
         );
       }
     }
@@ -115,17 +118,18 @@ export default class ListView extends Component {
             }}
           />
         }
-        onMomentumScrollEnd={({nativeEvent}) => {
+        onMomentumScrollEnd={({ nativeEvent }) => {
           if (!objectIsNull(this.props.onMomentumScrollEnd))
             this.props.onMomentumScrollEnd(nativeEvent);
         }}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{...style}}>
+        contentContainerStyle={{ ...style }}
+      >
         {arrayIsEmpty(items) ? (
-          showNotItem('Không có thông báo nào cả')
+          showNotItem("Không có thông báo nào cả")
         ) : (
-          <View style={{flexDirection: 'column'}}>{rows}</View>
+          <View style={{ flexDirection: "column" }}>{rows}</View>
         )}
       </ScrollView>
     );
@@ -133,5 +137,5 @@ export default class ListView extends Component {
 }
 ListView.defaultProps = {
   onRefresh: () => {},
-  refreshing: false,
+  refreshing: false
 };
