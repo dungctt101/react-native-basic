@@ -1,0 +1,19 @@
+{
+  "name": "react-native-basic",
+  "version": "1.0.0",
+  "description": "react-native-basic",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dungctt101/react-native-basic.git"
+  },
+  "author": "tiendung221992@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dungctt101/react-native-basic/issues"
+  },
+  "homepage": "https://github.com/dungctt101/react-native-basic#readme"
+}
