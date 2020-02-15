@@ -1,53 +1,42 @@
-import React from "react";
-import {
-  Text,
-  TouchableOpacity,
-} from "react-native";
-import Sizes from "./Sizes"
-import Colors from "./Colors"
+import React from 'react';
+import {Text, TouchableOpacity} from 'react-native';
+/**
+ * TODO: Button
+ * @param:style => style button
+ * @param:styleDisable => style button when disable
+ * @param:styleTitle => style title of button
+ * @param:styleTitleDisable => style title of button when disable
+ * @param:onClick => handle when click  button
+ * @param:disable => disable button
+ * @example:
+ *  <Button
+          style={{backgroundColor: '#ffee44'}}
+          styleDisable={{backgroundColor: '#ff33ee'}}
+          styleTitle={{color: '#ff3355'}}
+          disable={true}>
+          {'test'}
+        </Button>
+ */
 export default class Button extends React.Component {
   render() {
     const {
       style,
+      styleDisable,
       onClick,
-      title,
-      paddingHoz,
-      paddingVer,
-      sizeTitle,
-      enable,
-      backgroundColor,
+      styleTitle,
+      styleTitleDisable,
+      disable,
+      children,
     } = this.props;
     return (
       <TouchableOpacity
-        disabled={!enable}
+        disabled={disable}
         onPress={() => {
           onClick();
         }}
-        style={
-          
-          {
-            width: paddingHoz === undefined ? "100%" : undefined,
-            paddingHorizontal: paddingHoz != undefined ? paddingHoz : 5,
-            paddingVertical: paddingVer,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: backgroundColor === undefined ? (enable ? Colors.bg_button_highlight : Colors.bg_button_fuzzy) : bg,
-            alignSelf: "center",
-            borderRadius: Sizes.s10,
-            flexDirection: "row",
-            ...style
-          }
-        }
-      >
-        <Text
-          style={{
-            color: Colors.white,
-            fontSize: sizeTitle,
-            fontWeight: "bold",
-            textAlignVertical: "center"
-          }}
-        >
-          {title.toUpperCase()}
+        style={disable ? {...styleDisable} : {...style}}>
+        <Text style={disable ? {...styleTitleDisable} : {...styleTitle}}>
+          {children}
         </Text>
       </TouchableOpacity>
     );
@@ -55,10 +44,6 @@ export default class Button extends React.Component {
 }
 
 Button.defaultProps = {
-  enable: true,
-  paddingVer: Sizes.s20,
-  sizeTitle: Sizes.h30,
-  title: "",
-  onClick: () => { },
-  style: {}
+  disable: false,
+  onClick: () => {},
 };

@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import { View, ScrollView, RefreshControl } from "react-native";
 import { arrayIsEmpty, objectIsNull, showNotItem } from "./Functions";
+/**
+ * TODO: ListViews
+ * @param:items => list item
+ * @param:itemView => custom view of item
+ * @param:onEditItem => handle when click edit button
+ * @param:onRemoveItem => handle when click remove button
+ * @param:refreshing => show refreshing
+ * @param:onRefresh => handle when pull top
+ * @example:<ListView
+        refreshing={this.state.refreshing}  
+        onRefresh={this.onRefreshing}
+        style={{}}
+        parentFlatList={this}
+        onEditItem={(index,item) => {
+        }}
+        onRemoveItem={index,item)  => {
+        }}
+        items={["item","item"]}
+        itemView={item => return <Text>{item}</Text>)}>
+        <ListView>
+ */
 class FlatListItem extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +44,7 @@ class FlatListItem extends Component {
     if (!objectIsNull(onEditItem)) {
       right.push({
         onPress: () => {
-          onEditItem(index);
+          onEditItem(index,item);
         },
         text: "Edit",
         type: "primary"
@@ -32,7 +53,7 @@ class FlatListItem extends Component {
     if (!objectIsNull(onRemoveItem)) {
       right.push({
         onPress: () => {
-          onRemoveItem(index);
+          onRemoveItem(index,item);
         },
         text: "Delete",
         type: "delete"
@@ -137,5 +158,7 @@ export default class ListView extends Component {
 }
 ListView.defaultProps = {
   onRefresh: () => {},
-  refreshing: false
+  refreshing: false,
+  items:[],
+  itemView:()=>{}
 };
