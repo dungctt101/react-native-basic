@@ -6,6 +6,17 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+/**
+ * TODO: pull view when show keyboard
+ * @param:style => style view
+ * @param:isSafeView => SafeView of ios 
+ * @example:
+ *  <ViewKeyBoard
+ *      isSafeView
+          style={{backgroundColor: '#ffee44'}}>
+          <View><View>
+        </ViewKeyBoard>
+ */
 export default class ViewKeyBoard extends React.Component {
   constructor(props) {
     super(props);

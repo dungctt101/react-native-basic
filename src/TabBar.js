@@ -38,8 +38,12 @@ class TabBar extends React.Component {
             onClick(menu[cur].key);
           }}>
           <Image
-            style={{width: sizeIcon*2, height: sizeIcon, resizeMode: 'contain'}}
-            source={ menu[i].icon}
+            style={{
+              width: sizeIcon * 2,
+              height: sizeIcon,
+              resizeMode: 'contain',
+            }}
+            source={menu[i].icon}
           />
           {/* <Icon solid size={sizeIcon} name={menu[i].icon} color={menu[i].color}></Icon> */}
           <Text
@@ -48,7 +52,7 @@ class TabBar extends React.Component {
               color: i === select ? Colors.title : Colors.title_fuzzy,
               marginTop: Sizes.s20,
               fontSize: Sizes.h30,
-              fontWeight: i === select ?"bold":'700',
+              fontWeight: i === select ? 'bold' : '700',
               ...styleTitle,
             }}>
             {menu[i].title}
@@ -58,10 +62,8 @@ class TabBar extends React.Component {
     }
     return (
       <ViewShadow
-        // isBottomShadow={false}
         style={{
-          flexDirection: 'row',
-          backgroundColor: Colors.white,
+          width:"100%",
           ...style,
         }}>
         {tabs}

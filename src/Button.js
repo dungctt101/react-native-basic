@@ -22,7 +22,7 @@ export default class Button extends React.Component {
     const {
       style,
       styleDisable,
-      onClick,
+      onPress,
       styleTitle,
       styleTitleDisable,
       disable,
@@ -32,7 +32,7 @@ export default class Button extends React.Component {
       <TouchableOpacity
         disabled={disable}
         onPress={() => {
-          onClick();
+          onPress();
         }}
         style={disable ? {...styleDisable} : {...style}}>
         <Text style={disable ? {...styleTitleDisable} : {...styleTitle}}>
@@ -45,5 +45,5 @@ export default class Button extends React.Component {
 
 Button.defaultProps = {
   disable: false,
-  onClick: () => {},
+  onPress: () => {},
 };
