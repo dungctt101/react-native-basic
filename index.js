@@ -15,7 +15,11 @@ import TabBar from './src/TabBar';
 import ViewKeyBoard from './src/ViewKeyBoard';
 import ViewShadow from './src/ViewShadow';
 import ToastCustom from './src/ToastCustom';
+import RootSiblings from './react-native-root-siblings';
+import Modal from './src/Modal';
 export {
+  Modal,
+  RootSiblings,
   ToastCustom,
   Button,
   Colors,

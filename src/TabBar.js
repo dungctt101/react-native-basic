@@ -1,8 +1,40 @@
 import React from 'react';
-import {TouchableOpacity, Image, Text} from 'react-native';
-import Sizes from './Sizes';
-import Colors from './Colors';
-import ViewShadow from './ViewShadow';
+import {TouchableOpacity, View} from 'react-native';
+/**
+ * TODO: TabBar
+ * @example:
+     <TabBar
+          style={{backgroundColor: '#44ffff'}}
+          select={1}
+          items={[
+            {title: 'item 1', icon: ''},
+            {title: 'item 1', icon: ''},
+          ]}
+          onPressItem={select => {}}
+          itemView={(item, isSelect) => {
+            return (
+              <View>
+                <Image
+                  style={{
+                    width: 20,
+                    height: 20,
+                    resizeMode: 'contain',
+                  }}
+                  source={item.icon}
+                />
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: isSelect ? '#ff4433' : '#ff22ff',
+                    fontSize: 30,
+                    fontWeight: isSelect ? 'bold' : '300',
+                  }}>
+                  {item.title}
+                </Text>
+              </View>
+            );
+          }}
+ */
 class TabBar extends React.Component {
   state = {
     select: this.props.select,
@@ -16,67 +48,45 @@ class TabBar extends React.Component {
     }
   }
   render() {
-    const {onClick, menu, style, sizeIcon, styleTitle} = this.props;
+    const {onPressItem, items, style, itemView} = this.props;
     const {select} = this.state;
     const tabs = [];
-    for (var i = 0; i < menu.length; i++) {
+    for (var i = 0; i < items.length; i++) {
       const cur = i;
+      const isSelect = items[select] === items[cur] ? true : false;
       tabs.push(
         <TouchableOpacity
           style={{
             flexDirection: 'column',
-            flex: 100 / menu.length,
-            paddingVertical: Sizes.s10,
-            justifyContent: 'center',
-            alignItems: 'center',
+            flex: 100 / items.length,
           }}
           key={i}
           onPress={() => {
             this.setState({
               select: cur,
             });
-            onClick(menu[cur].key);
+            onPressItem(items[cur]);
           }}>
-          <Image
-            style={{
-              width: sizeIcon * 2,
-              height: sizeIcon,
-              resizeMode: 'contain',
-            }}
-            source={menu[i].icon}
-          />
-          {/* <Icon solid size={sizeIcon} name={menu[i].icon} color={menu[i].color}></Icon> */}
-          <Text
-            style={{
-              textAlign: 'center',
-              color: i === select ? Colors.title : Colors.title_fuzzy,
-              marginTop: Sizes.s20,
-              fontSize: Sizes.h30,
-              fontWeight: i === select ? 'bold' : '700',
-              ...styleTitle,
-            }}>
-            {menu[i].title}
-          </Text>
+          {itemView(items[cur], isSelect)}
         </TouchableOpacity>,
       );
     }
     return (
-      <ViewShadow
+      <View
         style={{
-          width:"100%",
+          width: '100%',
+          flexDirection: 'row',
           ...style,
         }}>
         {tabs}
-      </ViewShadow>
+      </View>
     );
   }
 }
 
 TabBar.defaultProps = {
-  sizeIcon: Sizes.s30,
-  styleTitle: {},
   style: {},
-  onClick: {},
-  menu: [],
+  onPressItem: {},
+  items: [],
 };
 export default TabBar;

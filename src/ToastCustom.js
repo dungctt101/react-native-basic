@@ -4,7 +4,7 @@ import React, {
 import RootSiblings from '../react-native-root-siblings';
 import ToastContainer, {positions, durations} from './ToastContainer';
 /**
- * TODO: Button
+ * TODO: show Toast
  * @param:message => error
  * @example:
    showToast = messenger => {

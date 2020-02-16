@@ -1,123 +1,93 @@
 import React from 'react';
-import { SafeAreaView, View, Image} from 'react-native';
-
-import Sizes from "./Sizes"
-import Colors from "./Colors"
-import Images from "./images"
-export default class ViewShadow extends React.Component {
-  showView() {}
-  render() {
-    const {
-      isSafeView,
-      isBottomShadow,
-      children,
-      style,
-      shadow,
-      paddingVer,
-      paddingHoz,
-    } = this.props;
-
-    if (isSafeView) {
-      return (
-        <SafeAreaView
-          style={{
-            backgroundColor: style.backgroundColor,
-            flexDirection: 'column',
-          }}>
-          {!isBottomShadow && (
-            <Image
-              style={{
-                position: 'relative',
-                bottom: shadow,
-                opacity: 0.35,
-                width: '100%',
-                height: shadow,
-                transform: [{rotate: '180deg'}],
-                backgroundColor: 'transparent',
-              }}
-              source={Images.shadow}></Image>
-          )}
-
+import {View, Image} from 'react-native';
+import Sizes from './Sizes';
+import Images from './images';
+/**
+ * TODO: shadow view
+ * @param:bottom => if shadow bottom
+ * @param:shadow => height of shadow
+ * @param:opacity => opacity of shadow
+ * @example: <SafeAreaView
+        style={{
+          flexDirection: 'column',
+          backgroundColor: '#ffffff',
+          flex: 1,
+          zIndex:1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ViewShadow  style={{
+            }}>
           <View
             style={{
-              width: '100%',
-              paddingHorizontal: paddingHoz,
-              paddingTop: isBottomShadow ? paddingVer : paddingVer - shadow,
-              paddingBottom: isBottomShadow ? paddingVer - shadow : paddingVer,
-              ...style,
-            }}>
-            {children}
-          </View>
-          {isBottomShadow && (
-            <Image
-              style={{
-                position: 'relative',
-                top: shadow,
-                opacity: 0.35,
-                width: '100%',
-                height: shadow,
-                backgroundColor: 'transparent',
-              }}
-              source={Images.shadow}></Image>
-          )}
-        </SafeAreaView>
-      );
-    } else {
-      return (
+              width: 200,
+              height: 200,
+              backgroundColor: '#33ff33',
+            }}></View>
+        </ViewShadow>
         <View
           style={{
-            backgroundColor: style.backgroundColor,
-            flexDirection: 'column',
-          }}>
-          {!isBottomShadow && (
+            // zIndex:5,
+            backgroundColor: '#ff33ff',
+            width: 200,
+            height: 200,
+          }}></View>
+      </SafeAreaView>
+ */
+export default class ViewShadow extends React.Component {
+  render() {
+    const {bottom, children, style, shadow, opacity} = this.props;
+    return (
+      <View
+        style={{zIndex: 2, width: '100%', flexDirection: 'column', ...style}}>
+        {children}
+        {bottom ? (
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              height: shadow,
+            }}>
+            <Image
+              style={{
+                position: 'relative',
+                top: shadow,
+                opacity: opacity,
+                width: '100%',
+                height: shadow,
+                backgroundColor: 'transparent',
+              }}
+              source={Images.shadow}></Image>
+          </View>
+        ) : (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              width: '100%',
+              height: shadow,
+            }}>
             <Image
               style={{
                 position: 'relative',
                 bottom: shadow,
-                opacity: 0.35,
+                opacity: opacity,
                 width: '100%',
                 height: shadow,
                 transform: [{rotate: '180deg'}],
                 backgroundColor: 'transparent',
               }}
               source={Images.shadow}></Image>
-          )}
-
-          <View
-            style={{
-              width: '100%',
-              paddingHorizontal: paddingHoz,
-              paddingTop: isBottomShadow ? paddingVer : paddingVer - shadow,
-              paddingBottom: isBottomShadow ? paddingVer - shadow : paddingVer,
-              ...style,
-            }}>
-            {children}
           </View>
-          {isBottomShadow && (
-            <Image
-              style={{
-                position: 'relative',
-                top: shadow,
-                opacity: 0.35,
-                width: '100%',
-                height: shadow,
-                backgroundColor: 'transparent',
-              }}
-              source={Images.shadow}></Image>
-          )}
-        </View>
-      );
-    }
+        )}
+      </View>
+    );
   }
 }
 
 ViewShadow.defaultProps = {
-  isSafeView: false,
-  isBottomShadow: true,
-  backgroundColor: Colors.white,
   shadow: Sizes.s25,
-  marginTop: Sizes.s30,
-  paddingVer: Sizes.s20,
-  paddingHoz: Sizes.s20,
+  opacity: 1,
   style: {},
 };
