@@ -34,37 +34,25 @@ const styles = StyleSheet.create({
 /**
  * TODO: TabBar
  * @example:
-     <TabBar
-          style={{backgroundColor: '#44ffff'}}
-          select={1}
-          items={[
-            {title: 'item 1', icon: ''},
-            {title: 'item 1', icon: ''},
-          ]}
-          onPressItem={select => {}}
-          itemView={(item, isSelect) => {
-            return (
-              <View>
-                <Image
-                  style={{
-                    width: 20,
-                    height: 20,
-                    resizeMode: 'contain',
-                  }}
-                  source={item.icon}
-                />
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: isSelect ? '#ff4433' : '#ff22ff',
-                    fontSize: 30,
-                    fontWeight: isSelect ? 'bold' : '300',
-                  }}>
-                  {item.title}
-                </Text>
-              </View>
-            );
-          }}
+  * @example:
+          <Modal
+        ref={'myModal'}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          width: screen.width - 80,
+          height: undefined,
+          ...style,
+        }}
+        position="center"
+        backdrop={true}
+        onClosed={() => {
+          onClose();
+        }}></Modal>
+
+    this.refs.myModal.open();
+ 
  */
 export default class ModalBox extends React.PureComponent {
   static propTypes = {

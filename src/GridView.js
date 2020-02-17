@@ -1,10 +1,44 @@
-import React from "react";
-import { View, TouchableOpacity, ScrollView } from "react-native";
-import Sizes from "./Sizes";
+import React from 'react';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
+/**
+ * TODO: GridView
+ * @example:
+          <GridView
+          onPressItem={(item, index) => {}}
+          columnCount={3}
+          items={[
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+            '0001',
+          ]}
+          paddingColumn={20}
+          paddingRow={10}
+          itemView={item => {
+            return (
+              <View
+                style={{
+                  width: '100%',
 
+                  backgroundColor: '#ff33ff',
+                }}>
+                <Text>{item}</Text>
+              </View>
+            );
+          }}></GridView>
+ */
 class GridView extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      widthContainer: 0,
+    };
   }
   render() {
     const {
@@ -15,8 +49,9 @@ class GridView extends React.Component {
       onScroll,
       itemView,
       paddingRow,
-      paddingColumn
+      paddingColumn,
     } = this.props;
+    const {widthContainer} = this.state;
     const rows = [];
     const countRow = Math.floor(items.length / columnCount) + 1;
     for (var iRow = 0; iRow < countRow; iRow++) {
@@ -32,58 +67,46 @@ class GridView extends React.Component {
           <TouchableOpacity
             key={cur}
             onPress={() => {
-              onPressItem(cur);
+              onPressItem(items[cur], cur);
             }}
             style={{
-              flex: 1 / columnCount,
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column"
-            }}
-          >
-            <View
-              style={{
-                marginRight:
-                  iColumn - iRow * columnCount + 1 === columnCount
-                    ? paddingColumn / 2
-                    : iColumn - iRow * columnCount === 0
-                    ? paddingColumn / 2
-                    : paddingColumn / 2,
-                marginLeft:
-                  iColumn - iRow * columnCount + 1 === columnCount
-                    ? paddingColumn / 2
-                    : iColumn - iRow * columnCount === 0
-                    ? paddingColumn / 2
-                    : paddingColumn / 2
-              }}
-            >
-              {itemView(items[iColumn])}
-            </View>
-          </TouchableOpacity>
+              width:
+                widthContainer / columnCount -
+                (paddingColumn * (columnCount - 1)/3),
+              marginRight: paddingColumn,
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}>
+            {itemView(items[iColumn])}
+          </TouchableOpacity>,
         );
       }
       rows.push(
         <View
           key={curRow}
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             paddingTop: paddingRow,
-            marginHorizontal: -paddingColumn / 2
-          }}
-        >
+          }}>
           {columns}
-        </View>
+        </View>,
       );
     }
 
     return (
-      <View style={{ flexDirection: "column", ...style }}>
+      <View
+        onLayout={info => {
+          this.setState({
+            widthContainer: info.nativeEvent.layout.width,
+          });
+        }}
+        style={{flexDirection: 'column', ...style}}>
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={{flexGrow: 1}}
           onScroll={onScroll}
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-        >
+          showsHorizontalScrollIndicator={false}>
           {rows}
         </ScrollView>
       </View>
@@ -91,16 +114,12 @@ class GridView extends React.Component {
   }
 }
 GridView.defaultProps = {
-  paddingColumn: Sizes.s20,
-  paddingRow: Sizes.s20,
+  paddingColumn: 0,
+  paddingRow: 0,
   onPressItem: () => {},
   onScroll: () => {},
   items: [],
   columnCount: 1,
-  style: {
-    flex: 1,
-    width: "100%"
-  },
-  styleRow: {}
+  style: {},
 };
 export default GridView;

@@ -17,7 +17,9 @@ import ViewShadow from './src/ViewShadow';
 import ToastCustom from './src/ToastCustom';
 import RootSiblings from './react-native-root-siblings';
 import Modal from './src/Modal';
+// import InputIcon from './src/InputIcon';
 export {
+  // InputIcon,
   Modal,
   RootSiblings,
   ToastCustom,

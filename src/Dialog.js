@@ -4,23 +4,13 @@ import {Button, Modal, Functions, TabBar} from '../index';
 /**
  * TODO: show Dialog/Alert
  * @example:
-          <Modal
-        ref={'myModal'}
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          width: screen.width - 80,
-          height: undefined,
-          ...style,
-        }}
-        position="center"
-        backdrop={true}
-        onClosed={() => {
-          onClose();
-        }}></Modal>
-
-    this.refs.myModal.open();
+           <Dialog title={'test'} ref="dialog"></Dialog>
+        <Button
+          onPress={() => {
+            this.refs.dialog.show();
+          }}>
+          {'dasdasd'}
+        </Button>
  */
 var screen = Dimensions.get('window');
 class Dialog extends Component {
@@ -28,8 +18,11 @@ class Dialog extends Component {
     super(props);
     this.state = {};
   }
-  showEditModal = () => {
+  show = () => {
     this.refs.myModal.open();
+  };
+  close = () => {
+    this.refs.myModal.close();
   };
   render() {
     const {
@@ -119,4 +112,4 @@ class Dialog extends Component {
 }
 
 export default Dialog;
-Dialog.defaultProps = {onClose: () => {}};
+Dialog.defaultProps = {onClose: () => {}, itemView: () => {}};
