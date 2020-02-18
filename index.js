@@ -17,9 +17,10 @@ import ViewShadow from './src/ViewShadow';
 import ToastCustom from './src/ToastCustom';
 import RootSiblings from './react-native-root-siblings';
 import Modal from './src/Modal';
+import ComboBox from './src/ComboBox';
 // import InputIcon from './src/InputIcon';
 export {
-  // InputIcon,
+  ComboBox,
   Modal,
   RootSiblings,
   ToastCustom,

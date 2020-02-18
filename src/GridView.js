@@ -50,6 +50,7 @@ class GridView extends React.Component {
       itemView,
       paddingRow,
       paddingColumn,
+paddingHorizontal
     } = this.props;
     const {widthContainer} = this.state;
     const rows = [];
@@ -71,8 +72,8 @@ class GridView extends React.Component {
             }}
             style={{
               width:
-                widthContainer / columnCount -
-                (paddingColumn * (columnCount - 1)/3),
+                (widthContainer / columnCount) -(paddingHorizontal*2/columnCount)-
+                (paddingColumn * (columnCount - 1)/columnCount),
               marginRight: paddingColumn,
               justifyContent: 'center',
               alignItems: 'center',
@@ -88,6 +89,7 @@ class GridView extends React.Component {
           style={{
             flexDirection: 'row',
             paddingTop: paddingRow,
+            paddingLeft:paddingHorizontal
           }}>
           {columns}
         </View>,
@@ -103,7 +105,8 @@ class GridView extends React.Component {
         }}
         style={{flexDirection: 'column', ...style}}>
         <ScrollView
-          contentContainerStyle={{flexGrow: 1}}
+        
+          contentContainerStyle={{flexGrow: 1,paddingVertical:this.props.paddingVertical}}
           onScroll={onScroll}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}>
@@ -114,6 +117,8 @@ class GridView extends React.Component {
   }
 }
 GridView.defaultProps = {
+  paddingHorizontal:0,
+  paddingVertical:0,
   paddingColumn: 0,
   paddingRow: 0,
   onPressItem: () => {},

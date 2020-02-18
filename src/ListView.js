@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, ScrollView, RefreshControl } from "react-native";
-import { arrayIsEmpty, objectIsNull, showNotItem } from "./Functions";
+import { View, ScrollView, RefreshControl,Text } from "react-native";
+import { arrayIsEmpty, objectIsNull } from "./Functions";
 /**
  * TODO: ListViews
  * @param:items => list item
@@ -111,7 +111,7 @@ export default class ListView extends Component {
     this.refs.addModal.showAddModal();
   }
   render() {
-    const { items, itemView, style, refreshing, onRefresh } = this.props;
+    const { items, itemView, style, refreshing, onRefresh,styleNoItemNote,noItemNote } = this.props;
     var rows = [];
     if (!arrayIsEmpty(items)) {
       for (var i = 0; i < items.length; i++) {
@@ -148,7 +148,21 @@ export default class ListView extends Component {
         contentContainerStyle={{ ...style }}
       >
         {arrayIsEmpty(items) ? (
-          showNotItem("Không có thông báo nào cả")
+          <View
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}>
+          <Text
+            style={{textAlign:"center",...styleNoItemNote,
+            
+            }}>
+            {noItemNote}
+          </Text>
+        </View>
         ) : (
           <View style={{ flexDirection: "column" }}>{rows}</View>
         )}
@@ -157,6 +171,8 @@ export default class ListView extends Component {
   }
 }
 ListView.defaultProps = {
+  noItemNote:"",
+  styleNoItemNote:{},
   onRefresh: () => {},
   refreshing: false,
   items:[],
