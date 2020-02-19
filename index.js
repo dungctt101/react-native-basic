@@ -18,8 +18,9 @@ import ToastCustom from './src/ToastCustom';
 import RootSiblings from './react-native-root-siblings';
 import Modal from './src/Modal';
 import ComboBox from './src/ComboBox';
-// import InputIcon from './src/InputIcon';
+import ComboBoxModal from './src/ComboBoxModal';
 export {
+  ComboBoxModal,
   ComboBox,
   Modal,
   RootSiblings,

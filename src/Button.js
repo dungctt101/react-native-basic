@@ -27,9 +27,11 @@ export default class Button extends React.Component {
       styleTitleDisable,
       disable,
       children,
+      onLayout,
     } = this.props;
     return (
       <TouchableOpacity
+        onLayout={onLayout}
         disabled={disable}
         onPress={() => {
           onPress();
