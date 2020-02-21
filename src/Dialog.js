@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View, Platform, Dimensions, TouchableOpacity} from 'react-native';
 import {Button, Modal, Functions, TabBar} from '../index';
+import {objectIsNull, stringIsEmpty} from './Functions';
 /**
  * TODO: show Dialog/Alert
  * @example:
@@ -16,25 +17,28 @@ var screen = Dimensions.get('window');
 class Dialog extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      title: !stringIsEmpty(this.props.title) ? this.props.title : '',
+      des: !stringIsEmpty(this.props.des) ? this.props.des : '',
+      onClose: !objectIsNull(this.props.onClose)
+        ? this.props.onClose
+        : () => {},
+    };
   }
-  show = () => {
+  show = (title, des, onClose) => {
+    this.setState({
+      title: !stringIsEmpty(title) ? title : '',
+      des: !stringIsEmpty(des) ? des : '',
+      onClose: !objectIsNull(onClose) ? onClose : () => {},
+    });
     this.refs.myModal.open();
   };
   close = () => {
     this.refs.myModal.close();
   };
   render() {
-    const {
-      style,
-      titleButtons,
-      itemView,
-      title,
-      styleTitle,
-      des,
-      styleDes,
-      onClose,
-    } = this.props;
+    const {style, titleButtons, styleTitle, itemView, styleDes} = this.props;
+    const {des, onClose, title} = this.state;
     return (
       <Modal
         ref={'myModal'}

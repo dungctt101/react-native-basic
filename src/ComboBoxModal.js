@@ -7,6 +7,8 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   TextInput,
+  Keyboard,
+  Platform,
   TouchableWithoutFeedbackComponent,
   TouchableHighlight,
   TouchableOpacityBase,
@@ -16,75 +18,108 @@ import Sizes from './Sizes';
 import Colors from './Colors';
 import ComboBox from './ComboBox';
 import Button from './Button';
-{/* <SafeAreaView
-style={{
-  flexDirection: 'column',
-  backgroundColor: '#ffffff',
-  flex: 1,
-}}>
-<ComboBoxModal
-  styleInputNew={{backgroundColor: '#4433ff', paddingVertical: 20}}
-  styleTitleInputNew={{fontSize: Sizes.s40}}
-  style={{backgroundColor: '#ffffff'}}
-  // visible={true}
-  styleText={{
-    color: '#333333',
-    // borderRadius: 10,
-    // backgroundColor: '#999999',
-  }}
-  multi={false}
-  isSearch={true}
-  ref="comboBox1"
-  onPressItemModal={(data, index) => {
-    console.warn('asdasda');
-  }}
-  onPress={() => {
-    console.warn('dd');
-    wait(1000).then(async () => {
-      this.refs.comboBox1.show(['aaa', 'aaa', 'aaa']);
-    });
-  }}
-  onChangeText={text => {
-    console.warn(text);
-    switch (text.toLowerCase()) {
-      case 'a':
-        wait(1000).then(async () => {
-          this.refs.comboBox1.changeItem(['item1', 'item1', 'item1']);
-        });
-        break;
-      case 'b':
-        wait(1000).then(async () => {
-          this.refs.comboBox1.changeItem(['item2', 'item2', 'item2']);
-        });
-        break;
-      default:
-        wait(1000).then(async () => {
-          this.refs.comboBox1.changeItem(['aa', 'aaa', 'aa']);
-        });
-        break;
-    }
-  }}></ComboBoxModal>
-<View style={{backgroundColor: '#ff33ff', height: 50}}></View>
-<Text>fsfs</Text>
-<Button
-  onPress={() => {
-    // this.refs.dialog.show();
-  }}>
-  {'dasdasd'}
-</Button>
-</SafeAreaView> */}
+//  <SafeAreaView
+//         style={{
+//           flexDirection: 'column',
+//           backgroundColor: '#ffffff',
+//           flex: 1,
+//         }}>
+//         <ComboBoxModal
+//           styleInputNew={{backgroundColor: '#4433ff', paddingVertical: 20}}
+//           styleTitleInputNew={{fontSize: Sizes.s40}}
+//           style={{backgroundColor: '#ffffff'}}
+//           // visible={true}
+//           styleText={{
+//             color: '#333333',
+//             // borderRadius: 10,
+//             // backgroundColor: '#999999',
+//           }}
+//           multi={false}
+//           isSearch={true}
+//           ref="comboBox1"
+//           onPressItemModal={(data, index) => {
+//             console.warn('asdasda');
+//           }}
+//           onPress={() => {
+//             console.warn('dd');
+//             wait(1000).then(async () => {
+//               this.refs.comboBox1.show(['aaa', 'aaa', 'aaa']);
+//             });
+//           }}
+//           onChangeText={text => {
+//             console.warn(text);
+//             switch (text.toLowerCase()) {
+//               case 'a':
+//                 wait(1000).then(async () => {
+//                   this.refs.comboBox1.changeItem(['item1', 'item1', 'item1']);
+//                 });
+//                 break;
+//               case 'b':
+//                 wait(1000).then(async () => {
+//                   this.refs.comboBox1.changeItem(['item2', 'item2', 'item2']);
+//                 });
+//                 break;
+//               default:
+//                 wait(1000).then(async () => {
+//                   this.refs.comboBox1.changeItem(['aa', 'aaa', 'aa']);
+//                 });
+//                 break;
+//             }
+//           }}></ComboBoxModal>
+//         <View style={{backgroundColor: '#ff33ff', height: 50}}></View>
+//         <Text>fsfs</Text>
+//         <Button
+//           onPress={() => {
+//             // this.refs.dialog.show();
+//           }}>
+//           {'dasdasd'}
+//         </Button>
+//       </SafeAreaView>
+
 export default class ComboBoxModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: this.props.visible,
       values: [],
+      margin: 0,
+
       positionInput: {x: 0, y: 0, height: 0, width: 0},
     };
   }
   componentDidMount() {
     // console.disableYellowBox = true;
   }
+
+  _keyboardDidHide = e => {
+    this.setState({
+      margin: 0,
+    });
+  };
+  _keyboardDidShow = e => {
+    this.setState({
+      // margin:0,
+      margin: e.endCoordinates.height,
+    });
+  };
+  componentWillUnmount() {
+    this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
+  }
+
+  componentDidMount() {
+    if (Platform.OS === 'ios') {
+      this.keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        this._keyboardDidShow,
+      );
+      this.keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        this._keyboardDidHide,
+      );
+    }
+  }
+
   getValuesString() {
     const {values} = this.state;
     var string = '';
@@ -120,8 +155,9 @@ export default class ComboBoxModal extends React.Component {
   };
 
   changeItem(items) {
-    // console.warn('Ddd');
-    this.refs.comboBox.changeItem(items);
+    // console.warn('Ddd',this.refs.comboBoxTest);
+    if (!objectIsNull(this.refs.comboBoxTest))
+      this.refs.comboBoxTest.changeItem(items);
   }
   render() {
     const {style, items, position} = this.props;
@@ -129,6 +165,7 @@ export default class ComboBoxModal extends React.Component {
     var itemViews = [];
 
     const {
+      titleInputNew,
       styleInputNew,
       styleTitleInputNew,
       onPressItemModal,
@@ -162,7 +199,9 @@ export default class ComboBoxModal extends React.Component {
           styleTitle={{
             ...styleTitleInputNew,
           }}>
-          {this.getValuesString()}
+          {this.getValuesString() !== ''
+            ? this.getValuesString()
+            : titleInputNew}
         </Button>
         <Modal
           onRequestClose={() => {}}
@@ -175,7 +214,7 @@ export default class ComboBoxModal extends React.Component {
               height: '100%',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: '#00000066',
+              backgroundColor: '#00000040',
             }}
             onPress={() => {
               this.hide();
@@ -183,8 +222,10 @@ export default class ComboBoxModal extends React.Component {
             <TouchableOpacity
               style={{
                 width: '90%',
+                marginBottom: this.state.margin,
               }}>
               <ComboBox
+                ref="comboBoxTest"
                 onPressItems={values => {
                   this.hide();
                   this.setState({
@@ -205,8 +246,7 @@ export default class ComboBoxModal extends React.Component {
                   }
                 }}
                 hideInput={true}
-                {...this.props}
-                ref="comboBox"></ComboBox>
+                {...this.props}></ComboBox>
             </TouchableOpacity>
           </TouchableOpacity>
         </Modal>
@@ -221,7 +261,7 @@ ComboBoxModal.defaultProps = {
   visible: false,
   items: [],
   onChangeText: () => {},
-  placeholder: 'search',
+  placeholder: 'Tìm kiếm',
   placeholderTextColor: '#ffffff',
   onBlur: () => {},
   onFocus: () => {},

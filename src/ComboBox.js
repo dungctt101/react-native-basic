@@ -9,10 +9,12 @@ import {
   BackHandler,
   TextInput,
   Modal,
+  ScrollView,
 } from 'react-native';
 import Sizes from './Sizes';
 import Colors from './Colors';
 import Button from './Button';
+
 import {arrayIsEmpty, objectIsNull} from './Functions';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 {
@@ -62,10 +64,16 @@ export default class ComboBox extends React.Component {
       visible: false,
       positionInput: 0,
       items: !arrayIsEmpty(this.props.items) ? this.props.items : [],
-      values: [],
+      values: this.props.values,
     };
   }
-  componentDidUpdate(prev) {}
+  componentDidUpdate(prev) {
+    if (prev.values != this.props.values) {
+      this.setState({
+        values: this.props.values,
+      });
+    }
+  }
 
   componentWillUnmount() {}
 
@@ -75,7 +83,8 @@ export default class ComboBox extends React.Component {
     this.props.onPress();
   }
   onBlur() {
-    this.hideItem();
+    // console.warn("onBlur")
+    if (!this.props.hideInput) this.hideItem();
     this.props.onBlur();
   }
   showItem() {
@@ -136,84 +145,77 @@ export default class ComboBox extends React.Component {
       onPress,
       styleButton,
       styleTitleButton,
-      styleTextItem,
+      textItem,
       hideInput,
       onPressItems,
     } = this.props;
     const {items, positionInput, visible, values} = this.state;
-    // console.warn('isSearch', isSearch);
+    // console.warn('items', items);
     var itemViews = [];
-    for (var i = 0; i < items.length; i++) {
-      const index = i;
-      itemViews.push(
-        <TouchableOpacity
-          style={{
-            marginHorizontal: Sizes.s20,
-            borderBottomWidth: 0.5,
-            borderBottomColor: '#e5e8e8',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          onPress={() => {
-            if (isSearch) {
-              this.refs.input.setNativeProps({text: items[index]});
-
-              onPressItem(items[index], index);
-              this.hideItem();
-            } else {
-              if (multi) {
-                if (this.checkValue(index)) {
-                  const newValue = values.filter(item => {
-                    return item.index !== index;
-                  });
-                  this.setState({
-                    values: newValue,
-                  });
-                } else {
-                  this.setState({
-                    values: [...values, {item: items[index], index: index}],
-                  });
-                }
-              } else {
-                this.setState({
-                  values: [{item: items[index], index: index}],
-                });
-                // console.warn("xxxxxx")
+    if (!arrayIsEmpty(items)) {
+      for (var i = 0; i < items.length; i++) {
+        const index = i;
+        itemViews.push(
+          <TouchableOpacity
+            style={{
+              marginHorizontal: Sizes.s20,
+              borderBottomWidth: 0.5,
+              borderBottomColor: '#e5e8e8',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => {
+              if (isSearch) {
+                this.refs.input.setNativeProps({text: items[index]});
                 onPressItem(items[index], index);
                 this.hideItem();
+              } else {
+                if (multi) {
+                  if (this.checkValue(index)) {
+                    const newValue = values.filter(item => {
+                      return item.index !== index;
+                    });
+                    this.setState({
+                      values: newValue,
+                    });
+                  } else {
+                    this.setState({
+                      values: [...values, {item: items[index], index: index}],
+                    });
+                  }
+                } else {
+                  this.setState({
+                    values: [{item: items[index], index: index}],
+                  });
+                  // console.warn("xxxxxx")
+                  onPressItem(items[index], index);
+                  this.hideItem();
+                }
               }
-            }
-          }}>
-          <Text
-            style={{
-              flex: 1,
-              color: '#ffffff',
-              fontSize: Sizes.h36,
-              paddingVertical: Sizes.s10,
-              ...styleTextItem,
             }}>
-            {items[i]}
-          </Text>
-          {multi &&
-            (this.checkValue(index) ? (
-              <Icon
-                solid
-                size={Sizes.s30}
-                name={'check-circle'}
-                color={'#58d68d'}></Icon>
-            ) : (
-              <Icon
-                // solid
-                size={Sizes.s30}
-                name={'circle'}
-                color={'#d5dbdb'}></Icon>
-            ))}
-        </TouchableOpacity>,
-      );
+            {!objectIsNull(textItem(items[index])) && textItem(items[index])}
+
+            {multi &&
+              (this.checkValue(index) ? (
+                <Icon
+                  solid
+                  size={Sizes.s30}
+                  name={'check-circle'}
+                  color={'#58d68d'}></Icon>
+              ) : (
+                <Icon
+                  // solid
+                  size={Sizes.s30}
+                  name={'circle'}
+                  color={'#d5dbdb'}></Icon>
+              ))}
+          </TouchableOpacity>,
+        );
+      }
     }
     return (
-      <View style={{zIndex: 20, ...style}}>
+      <View style={{...style}}>
         {isSearch && (
           <TextInput
             ref="input"
@@ -303,39 +305,39 @@ export default class ComboBox extends React.Component {
             {this.getValuesString()}
           </Button>
         )} */}
-        <View>
-          {visible && !arrayIsEmpty(items) && (
-            <View
+        {visible && !arrayIsEmpty(items) && (
+          <View style={{flex: 1, backgroundColor: '#00000099'}}>
+            <ScrollView
               style={{
                 width: '100%',
-                backgroundColor: '#00000099',
-                position: 'absolute',
+                // position: 'absolute',
                 borderBottomLeftRadius: styleText.borderRadius,
                 borderBottomRightRadius: styleText.borderRadius,
-              }}>
+              }}
+              contentContainerStyle={{flex: 1}}>
               {itemViews}
-              {!isSearch && multi && (
-                <Button
-                  onPress={() => {
-                    onPressItems(values);
-                    this.hideItem();
-                  }}
-                  style={{
-                    paddingVertical: Sizes.s20,
-                    ...styleButton,
-                  }}
-                  styleTitle={{
-                    textAlign: 'center',
-                    fontSize: Sizes.h38,
-                    color: '#ffffff',
-                    ...styleTitleButton,
-                  }}>
-                  Đóng
-                </Button>
-              )}
-            </View>
-          )}
-        </View>
+            </ScrollView>
+            {!isSearch && multi && (
+              <Button
+                onPress={() => {
+                  onPressItems(values);
+                  this.hideItem();
+                }}
+                style={{
+                  paddingVertical: Sizes.s20,
+                  ...styleButton,
+                }}
+                styleTitle={{
+                  textAlign: 'center',
+                  fontSize: Sizes.h38,
+                  color: '#ffffff',
+                  ...styleTitleButton,
+                }}>
+                Đóng
+              </Button>
+            )}
+          </View>
+        )}
       </View>
     );
   }
